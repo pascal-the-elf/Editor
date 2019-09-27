@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><Editor>Homepage</Editor></title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <!-- Dark Barrier -->
+    <div class="Dark-Barrier" onclick="sidebar()"></div>
+    
+    <!-- Sidebar -->
+    <div class="w3-sidebar w3-bar-block Sidebar">
+        <a href="javascript:sidebar()" class="w3-bar-item w3-button">Close</a>
+        <a href="javascript:newdoc()" class="w3-bar-item w3-button">New Doc</a>
+        <a href="javascript:showfiles()" class="w3-bar-item w3-button">Files</a>
+        <a href="javascript:settings()" class="w3-bar-item w3-button">Settings</a>
+    </div>
+    
+    <!-- Navigation -->
+    <div class="w3-bar w3-white" style="width: 100%; font-size: 1.2rem">
+        <a href="javascript:sidebar()" class="w3-bar-item w3-button"><i class="material-icons" style="zoom: 1.2">menu</i></a>
+        <a href="https://pascal-the-elf.github.io/Editor/" class="w3-bar-item w3-button w3-right"><b>&lt;/Editor&gt;</b></a>
+    </div>
+    
+    <!-- Editor -->
+    <div class="Editor-Container">
+        <textarea class="Editor w3-code w3-round w3-card notranslate" rows="18" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+    </div>
+    
+    <!-- Doc Helper-->
+    <div class="Doc-Helper" onclick="newdoc()">
+        <div class="container w3-round dhc">
+            
+        </div>
+    </div>
+    
+    <!-- File Browser -->
+    <div class="File-Browser" onclick="showfiles()">
+        <div class="container w3-round fbc">
+            
+        </div>
+    </div>
+    
+    <!-- Settings Page -->
+    <div class="Settings-Page" onclick="settings()">
+        <div class="container w3-round spc">
+            
+        </div>
+    </div>
+    
+    
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: white;
+        }
+        .Dark-Barrier {
+            z-index: 10;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            display: none;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, .0);
+            transition: background-color 0.5s;
+        }
+        .Sidebar {
+            z-index: 20;
+            position: fixed;
+            left: -200px;
+            width: 200px;
+            background-color: white;
+            transition: left 0.5s;
+        }
+        .Editor-Container {
+            margin: 16px;
+        }
+        .Editor {
+            width: 100%;
+            background-color: #41444e;
+            color: #fff;
+            font-weight: 500;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 18px;
+        }
+        .Doc-Helper, .File-Browser, .Settings-Page {
+            z-index: 30;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: none; /* flex */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, .6);
+            transition: background-color 0.5s;
+        }
+        .Doc-Helper > .container, .File-Browser > .container, .Settings-Page > .container {
+            width: 85%;
+            height: 90%;
+            max-width: 800px;
+            background: white;
+        }
+    </style>
+    <script>
+        elm("dhc").addEventListener("click", e => {
+            e.stopPropagation();
+        }, true);
+        elm("fbc").addEventListener("click", e => {
+            e.stopPropagation();
+        }, true);
+        elm("spc").addEventListener("click", e => {
+            e.stopPropagation();
+        }, true);
+        
+        function sidebar() {
+            if(elm("Sidebar").style.left == "-200px") {
+                elm("Sidebar").style.left = "0px";
+                elm("Dark-Barrier").style.display = "block";
+                elm("Dark-Barrier").style.backgroundColor = "rgba(0, 0, 0, .6)";
+            }
+            else {
+                elm("Sidebar").style.left = "-200px"
+                setTimeout(function(){elm("Dark-Barrier").style.display = "none";}, 500);
+                elm("Dark-Barrier").style.backgroundColor = "rgba(0, 0, 0, .0)";
+            }
+        }
+        function newdoc() {
+            if(elm("Doc-Helper").style.display == "none") {
+                sidebar();
+                elm("Doc-Helper").style.display = "flex";
+            }
+            else {
+                elm("Doc-Helper").style.display = "none";
+            }
+        }
+        function showfiles() {
+            if(elm("File-Browser").style.display == "none") {
+                sidebar();
+                elm("File-Browser").style.display = "flex";
+            }
+            else {
+                elm("File-Browser").style.display = "none";
+            }
+        }
+        function settings() {
+            if(elm("Settings-Page").style.display == "none") {
+                sidebar();
+                elm("Settings-Page").style.display = "flex";
+            }
+            else {
+                elm("Settings-Page").style.display = "none";
+            }
+        }
+        function elm(cls) {
+            return document.getElementsByClassName(cls)[0];
+        }
+    </script>
+</body>
+</html>
