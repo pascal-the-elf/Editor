@@ -20,6 +20,7 @@
     <!-- Navigation -->
     <div class="w3-bar w3-white" style="width: 100%; font-size: 1.2rem">
         <a href="javascript:sidebar()" class="w3-bar-item w3-button"><i class="material-icons" style="zoom: 1.2">menu</i></a>
+        <a href="javascript:sidebar()" class="w3-bar-item w3-button"><i class="material-icons" style="zoom: 1.2">save</i></a>
         <a href="https://pascal-the-elf.github.io/Editor/" class="w3-bar-item w3-button w3-right"><b>&lt;/Editor&gt;</b></a>
     </div>
     
@@ -77,7 +78,7 @@
             transition: left 0.5s;
         }
         .Editor-Container {
-            margin: 16px;
+            margin: 0 16px;
         }
         .Editor {
             width: 100%;
@@ -97,7 +98,7 @@
             position: fixed;
             top: 0;
             left: 0;
-            display: none; /* flex */
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
@@ -164,6 +165,59 @@
         function elm(cls) {
             return document.getElementsByClassName(cls)[0];
         }
+        function files() {
+            if(!localStorage["editor-files"]) localStorage["editor-files"] = "[]";
+            return JSON.parse(localStorage["editor-files"]);
+        }
+        function createfile(type, name) {
+            var list = files();
+            var fet = Date.now();
+            var file = {
+                type: type,
+                name: name,
+                content: "",
+                lastEdit: fet,
+                firstEdit: fet
+            };
+            list.push(fet);
+            localStorage["editor-files"] = JSON.stringify(list);
+            localStorage["editor-file-"+fet] = JSON.stringify(file);
+            console.log("File System: Created File. "+fet);
+            console.log(file);
+        }
+        function savefile(id, type, name, content) {
+            var file = JSON.parse(localStorage["editor-file-"+id]);
+            file.type = type;
+            file.name = name;
+            file.content = content;
+            file.lastEdit = Date.now();
+            localStorage["editor-file-"+id] = JSON.stringify(file);
+            console.log("File System: Updated File. "+id);
+            console.log(file);
+        }
+        function deletefile(id) {
+            localStorage.removeItem("editor-file-"+id);
+            var list = files();
+            var loc = -1;
+            for(var i = 0; i < list.length; i++)
+                if(list[i] == id) loc = i;
+            if(loc != -1) {
+                list.splice(loc, 1);
+                localStorage["editor-files"] = JSON.stringify(list);
+                console.log("File System: Deleted File. "+id);
+            }
+        }
+        /*
+localStorage["editor-files"] is a files list array (locations)
+localStorage["editor-file-"+n] is file (n = fet in ms):
+{
+type: "html" || "javascript" || "css" || "plain text",
+name: FILENAME,
+content: FILECONTENT,
+lastEdit: MS,
+firstEdit: MS
+}
+        */
     </script>
 </body>
 </html>
