@@ -32,7 +32,51 @@
     <!-- Doc Helper-->
     <div class="Doc-Helper" onclick="newdoc()">
         <div class="container w3-round dhc">
-            
+            <div class="w3-panel w3-round w3-light-gray w3-margin pointer">
+                <p>HTML</p>
+            </div>
+            <div class="html-collection" style="height: 0px; transition: height 0.5s; overflow: hidden;">
+                <div class="w3-panel w3-round w3-white w3-border w3-margin pointer" onclick="Template(0, 0)">
+                    <p>Plain HTML</p>
+                </div>
+                <div class="w3-panel w3-round w3-white w3-border w3-margin pointer" onclick="Template(0, 1)">
+                    <p>HTML with Copyright</p>
+                </div>
+                <div class="w3-panel w3-round w3-white w3-border w3-margin pointer" onclick="Template(0, 2)">
+                    <p>HTML with Script & CSS</p>
+                </div>
+                <div class="w3-panel w3-round w3-white w3-border w3-margin pointer" onclick="Template(0, 3)">
+                    <p>HTML with W3.CSS</p>
+                </div>
+                <div class="w3-panel w3-round w3-white w3-border w3-margin pointer" onclick="Template(0, 4)">
+                    <p>HTML with Bootstrap</p>
+                </div>
+            </div>
+            <div class="w3-panel w3-round w3-light-gray w3-margin pointer">
+                <p>Javascript</p>
+            </div>
+            <div class="javascript-collection" style="height: 0px; transition: height 0.5s; overflow: hidden;">
+                <div class="w3-panel w3-round w3-white w3-border w3-margin pointer" onclick="Template(1, 0)">
+                    <p>Plain Javascript</p>
+                </div>
+                <div class="w3-panel w3-round w3-white w3-border w3-margin pointer" onclick="Template(1, 1)">
+                    <p>Javascript with Copyright</p>
+                </div>
+                <div class="w3-panel w3-round w3-white w3-border w3-margin pointer" onclick="Template(1, 2)">
+                    <p>Use Strict</p>
+                </div>
+            </div>
+            <div class="w3-panel w3-round w3-light-gray w3-margin pointer">
+                <p>CSS</p>
+            </div>
+            <div class="css-collection" style="height: 0px; transition: height 0.5s; overflow: hidden;">
+                <div class="w3-panel w3-round w3-white w3-border w3-margin pointer" onclick="Template(2, 0)">
+                    <p>Plain CSS</p>
+                </div>
+                <div class="w3-panel w3-round w3-white w3-border w3-margin pointer" onclick="Template(2, 1)">
+                    <p>CSS with Copyright</p>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -110,19 +154,38 @@
             height: 90%;
             max-width: 800px;
             background: white;
+            overflow: auto;
+        }
+        .pointer {
+            cursor: pointer;
         }
     </style>
     <script>
         var editor = elm("Editor");
+        
+        // prevent unwantted window closures
         elm("dhc").addEventListener("click", e => {
             e.stopPropagation();
-        }, true);
+        }, false);
         elm("fbc").addEventListener("click", e => {
             e.stopPropagation();
-        }, true);
+        }, false);
         elm("spc").addEventListener("click", e => {
             e.stopPropagation();
-        }, true);
+        }, false);
+        
+        // open / close doc options
+        elm("dhc").children[0].addEventListener("click", e => {
+            elm("html-collection").style.height == "0px" ? elm("html-collection").style.height = "375px" : elm("html-collection").style.height = "0px";
+        });
+        elm("dhc").children[2].addEventListener("click", e => {
+            elm("javascript-collection").style.height == "0px" ? elm("javascript-collection").style.height = "225px" : elm("javascript-collection").style.height = "0px";
+        });
+        elm("dhc").children[4].addEventListener("click", e => {
+            elm("css-collection").style.height == "0px" ? elm("css-collection").style.height = "150px" : elm("css-collection").style.height = "0px";
+        });
+        
+        // load opened file into Editor
         if(localStorage["editor-opened"]) {
             editor.value = JSON.parse(localStorage["editor-file-"+localStorage["editor-opened"]]).content;
         }
@@ -214,6 +277,11 @@
                 localStorage["editor-files"] = JSON.stringify(list);
                 console.log("File System: Deleted File. "+id);
             }
+        }
+        function Template(mod, type) {
+            console.log("Template: Fetching Template. " + "./templates/"+mod+"/"+type+".template");
+            fetch("./templates/"+mod+"/"+type+".template").then(r=>r.text()).then(t=>editor.value = t);
+            console.log("Template: Completed.");
         }
         /*
 {
