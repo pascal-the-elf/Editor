@@ -20,7 +20,7 @@
     <!-- Navigation -->
     <div class="w3-bar w3-white" style="width: 100%; font-size: 1.2rem">
         <a href="javascript:sidebar()" class="w3-bar-item w3-button"><i class="material-icons" style="zoom: 1.2">menu</i></a>
-        <a href="javascript:sidebar()" class="w3-bar-item w3-button"><i class="material-icons" style="zoom: 1.2">save</i></a>
+        <a href="javascript:save()" class="w3-bar-item w3-button"><i class="material-icons" style="zoom: 1.2">save</i></a>
         <a href="https://pascal-the-elf.github.io/Editor/" class="w3-bar-item w3-button w3-right"><b>&lt;/Editor&gt;</b></a>
     </div>
     
@@ -113,6 +113,7 @@
         }
     </style>
     <script>
+        var editor = elm("Editor");
         elm("dhc").addEventListener("click", e => {
             e.stopPropagation();
         }, true);
@@ -122,6 +123,9 @@
         elm("spc").addEventListener("click", e => {
             e.stopPropagation();
         }, true);
+        if(localStorage["editor-opened"]) {
+            editor.value = JSON.parse(localStorage["editor-file-"+localStorage["editor-opened"]]).content;
+        }
         
         function sidebar() {
             if(elm("Sidebar").style.left == "-200px") {
@@ -169,6 +173,10 @@
             if(!localStorage["editor-files"]) localStorage["editor-files"] = "[]";
             return JSON.parse(localStorage["editor-files"]);
         }
+        function file(id) {
+            if(localStorage["editor-file-"+id]) return JSON.parse(localStorage["editor-file-"+id]);
+            return null;
+        }
         function createfile(type, name) {
             var list = files();
             var fet = Date.now();
@@ -208,8 +216,6 @@
             }
         }
         /*
-localStorage["editor-files"] is a files list array (locations)
-localStorage["editor-file-"+n] is file (n = fet in ms):
 {
 type: "html" || "javascript" || "css" || "plain text",
 name: FILENAME,
